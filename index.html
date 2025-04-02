@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    .firstdiv{
+        background-image: url(destructive_car_race-1920x1200.jpg);
+        height: 100vh;
+        width: 100%;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.116);
+        background-blend-mode:darken;
+    }
+    .seconddiv{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* background-color: rgba(0, 255, 255, 0.61); */
+        height: 300px;
+        width: 500px;
+        background: linear-gradient(rgba(255, 0, 0, 0.582), rgba(255, 255, 0, 0.527));
+        background-blend-mode: lighten;
+    }
+    #input{
+        text-align: center;
+        font-weight: 700;
+    }
+    h1{
+        font-size: 30px;
+        font-weight: 900;
+        color: chartreuse;
+        
+    }
+    p{
+        font-weight: 800;
+        font-size: 17px;
+    }
+    #provider,#amount{
+        background-color: black;
+        color: wheat;
+        font-weight: 700;
+        /* text-align: center; */
+    }
+    #btn{
+        background-color: black;
+        color: wheat;
+        font-weight: 700;
+        border: none;
+        height: 20px;
+        width: 100px;
+        outline: palevioletred solid 1px;
+
+    }
+    #btn2{
+        background-color: black;
+        color: wheat;
+        font-weight: 700;
+        border: none;
+        height: 20px;
+        width: 90px;
+        outline: palevioletred solid 1px;
+
+    }
+    #previewdiv {
+        color: black;
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 500px;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    #preview1{
+        display: flex;
+        text-align: center;
+        gap: 40px;
+    }
+
+    #preview p{
+        display: flex;
+        gap: 100px;
+        background-color: white;
+        align-items: center;
+
+    }
+    #balance{
+        font-size: 15px;
+        font-weight: 800;
+        
+    }
+    #innerdiv{
+        color: black;
+        display: flex;
+        width: 500px;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        word-spacing: 45px;
+    }
+    #amountt{
+        margin-right: 40px;
+    }
+
+    @media (max-width:510px) {
+        .seconddiv{  
+            width: 400px;
+            
+        }
+        .firstdiv{
+            width: 100%;
+        }
+
+       
+       
+    }
+    @media (max-width:433px) {
+        #preview p{  
+            font-size: 12px;
+        }
+        
+       
+       
+    }
+    @media (max-width:405px) {
+        #preview p{  
+            font-size: 10px;
+        }
+        .seconddiv{  
+            width: 350px;
+            
+        }
+         p{
+            font-size: 9px;
+            text-align: center;
+            
+        }
+
+        
+       
+       
+    }
+
+</style>
+
+<body>
+
+    <div class="firstdiv">
+        <div class="seconddiv">
+            <h1>RECHARGE CARD</h1>
+            <br>
+            <div class="thirddiv">
+                <select name="" id="provider">
+                    <option value=""> Choose Provider</option>
+                    <option value="MTN"> MTN</option>
+                    <option value="GLO"> GLO</option>
+                    <option value="AIRTEL"> AIRTEL</option>
+                    <option value="9MOBILE"> 9MOBILE</option>
+                </select>
+            
+            
+                <select name="" id="amount">
+                    <option value=""> Choose Amount</option>
+                    <option value="100"> 100</option>
+                    <option value="200"> 200</option>
+                    <option value="500"> 500</option>
+                    <option value="1000"> 1000</option>
+                </select>
+            </div>
+        
+            <br>
+            <br>
+        
+            <button id="btn" onclick="generatePin()">Generate Pin</button>
+            <br>
+            <p id="mypin"> </p>
+        
+            <br>
+            <br>
+        
+            <input id="input" type="text" value="*311*pin#" >
+            <br>
+            <button id="btn2" onclick="loadCard()"> Load card</button>
+            <br>
+            <div id="balance"></div>
+        </div>
+        <div id="previewdiv">
+            <div id="preview1">
+                <!-- <p>S/n</p> <p>Network</p> <p id="amountt">Amount</p><p>Pin</p><p>Condition</p> -->
+                 <p>HISTORY</p>
+            </div>
+            <div id="preview"></div>
+        
+        </div>
+        
+    </div>
+
+    
+
+
+</body>
+
+</html>
+<script>
+        let history = []
+        let  rechargeCode 
+        let myAmount = 0
+        // balance.innerHTML = `Balance`
+        
+        
+       
+       
+       
+    //     let providers = provider.value 
+    //    let amounts = amount.value
+    
+       
+        
+      
+    function generatePin() {
+
+        rechargeCode = Math.floor(Math.random() * 990000000000000) + 1000000000000
+        
+       if (provider.value === '' || amount.value === '') {
+        alert('Select Network and Amount')
+        mypin.innerHTML = ''
+        
+       }else{
+        mypin.innerHTML = `Network: ${provider.value} Amount: ${amount.value} Pin: ${rechargeCode}`
+        
+
+       }
+  
+        
+    }
+    function loadCard() {
+        
+        if (input.value === `*311*${rechargeCode}#`) {
+            alert(`#${amount.value} ${provider.value} Recharge card loaded successfully`)
+            mypin.innerHTML = ''
+            
+            input.value = '*311*pin#'
+            history.push(` ${provider.value}     ${amount.value}     ${rechargeCode}     Used`)
+            preview.innerHTML = ''
+            history.forEach((val,i)=>{
+            preview.innerHTML += `<p id='innerdiv'>  ${++i} ${val}</p>`
+            })
+            myAmount += parseInt(amount.value)
+            balance.innerHTML = `Balance: #${myAmount}`
+           
+
+            amount.value = ''
+            provider.value = ""
+            
+
+            
+            
+          
+            
+            
+            
+        }else if(input.value === `*311*pin#`){
+            alert('Input pin')
+        }else{
+            alert('Incorrect Pin')
+        }
+        
+        
+    }
+
+
+
+    
+   
+
+
+    
+    
+    
+    
+    
+    
+       
+    
+
+</script>
