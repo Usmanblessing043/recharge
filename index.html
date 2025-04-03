@@ -19,10 +19,11 @@
         background-size: cover;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        /* justify-content: center; */
         align-items: center;
         background-color: rgba(0, 0, 0, 0.116);
         background-blend-mode:darken;
+        
     }
     .seconddiv{
         display: flex;
@@ -34,6 +35,7 @@
         width: 500px;
         background: linear-gradient(rgba(255, 0, 0, 0.582), rgba(255, 255, 0, 0.527));
         background-blend-mode: lighten;
+        margin-top: 40px;
     }
     #input{
         text-align: center;
@@ -116,6 +118,26 @@
     #amountt{
         margin-right: 40px;
     }
+    table, thead, tbody, th, td, tr{
+        border-collapse: collapse;
+        padding: 10px;
+        border: solid 2px greenyellow;
+        color: black;
+        background-color: wheat;
+        text-align: center;
+        
+        
+
+    }
+    th, td{
+        width: 150px;
+        
+    }
+    td:nth-child(even) {
+        background-color: brown;
+    }
+    
+    
 
     @media (max-width:510px) {
         .seconddiv{  
@@ -199,14 +221,19 @@
             <br>
             <div id="balance"></div>
         </div>
-        <div id="previewdiv">
-            <div id="preview1">
-                <!-- <p>S/n</p> <p>Network</p> <p id="amountt">Amount</p><p>Pin</p><p>Condition</p> -->
-                 <p>HISTORY</p>
-            </div>
-            <div id="preview"></div>
-        
-        </div>
+        <table id="tablee">
+            <thead>
+                <th>s/n </th>
+                <th>provider</th>
+                <th>amount</th>
+                <th>pin</th>
+                <th>validity</th>
+
+            </thead>
+            <tbody id="tbody">
+                
+            </tbody>
+        </table>
         
     </div>
 
@@ -218,8 +245,9 @@
 </html>
 <script>
         let history = []
-        let  rechargeCode 
-        let myAmount = 0
+        let totalamount = { MTN: 0, AIRTEL: 0, GLO:0, '9MOBILE' : 0 }
+        // let  rechargeCode 
+        
         // balance.innerHTML = `Balance`
         
         
@@ -234,54 +262,71 @@
       
     function generatePin() {
 
-        rechargeCode = Math.floor(Math.random() * 990000000000000) + 1000000000000
+        
         
        if (provider.value === '' || amount.value === '') {
         alert('Select Network and Amount')
         mypin.innerHTML = ''
         
        }else{
+       let rechargeCode = Math.floor(Math.random() * 90000000000000) + 10000000000000
+       let rechargeCodes = {provide: provider.value, amount: amount.value, rechargeCode: rechargeCode, used: false} 
+        history.push(rechargeCodes)
         mypin.innerHTML = `Network: ${provider.value} Amount: ${amount.value} Pin: ${rechargeCode}`
-        
+
+        display()
 
        }
   
         
     }
-    function loadCard() {
-        
-        if (input.value === `*311*${rechargeCode}#`) {
-            alert(`#${amount.value} ${provider.value} Recharge card loaded successfully`)
-            mypin.innerHTML = ''
-            
-            input.value = '*311*pin#'
-            history.push(` ${provider.value}     ${amount.value}     ${rechargeCode}     Used`)
-            preview.innerHTML = ''
-            history.forEach((val,i)=>{
-            preview.innerHTML += `<p id='innerdiv'>  ${++i} ${val}</p>`
-            })
-            myAmount += parseInt(amount.value)
-            balance.innerHTML = `Balance: #${myAmount}`
-           
 
-            amount.value = ''
-            provider.value = ""
-            
+    function display() {
+        tbody.innerHTML = ""
+        history.forEach((card, i ,arr)=>{
+            tbody.innerHTML += `<tr>
+                    <td>${i+1}</td>
+                    <td>${card.provide}</td>
+                    <td>${card.amount}</td>
+                    <td>${card.rechargeCode}</td>
+                    <td>${card.used}</td>
+                </tr>`
 
-            
-            
-          
-            
-            
-            
-        }else if(input.value === `*311*pin#`){
-            alert('Input pin')
-        }else{
-            alert('Incorrect Pin')
-        }
-        
+
+        })
         
     }
+    function loadCard() {
+
+        let foundcard = history.find((card) => { return card.rechargeCode == input.value.trim().slice(5, 19)})
+
+            // console.log(input.value.trim().slice(5, 19));
+            
+        if(input.value.trim()=== ''){
+            alert('input a valid code')
+        }else if(foundcard === undefined){
+            alert('does not exist')
+        }else if(input.value !== `*311*${foundcard.rechargeCode}#`){
+            alert('please enter a valid format')
+        }else if(foundcard.used === true){
+            alert('card has been used')
+            input.value = `*311*pin#`
+            
+        }
+        else{
+            foundcard.used =  true
+            alert(`${foundcard.amount} ${foundcard.provide} recharge card loaded successfully`)
+            display()
+            input.value = `*311*pin#`
+            provider.value = ''
+            amount.value = ''
+            mypin.innerHTML = ''
+                
+            totalamount [foundcard.provide] += parseInt(foundcard.amount)
+            balance.innerHTML = `${foundcard.provide} BALANCE = ${totalamount [foundcard.provide]}`
+        }
+    }    
+        
 
 
 
